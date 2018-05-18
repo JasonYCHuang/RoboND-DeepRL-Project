@@ -71,6 +71,8 @@
 // Lock base rotation DOF (Add dof in header file if off)
 #define LOCKBASE true
 
+// Agent actions
+#define NUM_ACTIONS DOF * 2
 
 namespace gazebo
 {
@@ -161,13 +163,14 @@ bool ArmPlugin::createAgent()
 	if( agent != NULL )
 		return true;
 
-			
-	/*
-	/ TODO - Create DQN Agent
-	/
-	*/
-	
-	agent = NULL;
+
+	// TODO - Create DQN Agent
+	agent = dqnAgent::Create(
+		INPUT_WIDTH, INPUT_HEIGHT, INPUT_CHANNELS, NUM_ACTIONS,
+		OPTIMIZER, LEARNING_RATE, REPLAY_MEMORY, BATCH_SIZE,
+		GAMMA, EPS_START, EPS_END, EPS_DECAY, 
+		USE_LSTM, LSTM_SIZE, ALLOW_RANDOM, DEBUG_DQN
+	);
 
 	if( !agent )
 	{
