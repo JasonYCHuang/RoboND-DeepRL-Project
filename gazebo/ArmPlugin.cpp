@@ -583,15 +583,11 @@ void ArmPlugin::OnUpdate(const common::UpdateInfo& updateInfo)
 			endEpisode    = true;
 		}
 		
-		/*
-		/ TODO - Issue an interim reward based on the distance to the object
-		/
-		*/ 
-		
-		/*
+		// TODO - Issue an interim reward based on the distance to the object
 		if(!checkGroundContact)
 		{
-			const float distGoal = 0; // compute the reward from distance to the goal
+			const float distGoal = BoxDistance(gripBBox, propBBox); // compute the reward from distance to the goal
+			const float alpha = 0.1f;
 
 			if(DEBUG){printf("distance('%s', '%s') = %f\n", gripper->GetName().c_str(), prop->model->GetName().c_str(), distGoal);}
 
@@ -601,13 +597,16 @@ void ArmPlugin::OnUpdate(const common::UpdateInfo& updateInfo)
 				const float distDelta  = lastGoalDistance - distGoal;
 
 				// compute the smoothed moving average of the delta of the distance to the goal
-				avgGoalDelta  = 0.0;
-				rewardHistory = None;
-				newReward     = None;	
+				avgGoalDelta  = (avgGoalDelta * alpha) + (distDelta * (1.0f - alpha));
+				rewardHistory = avgGoalDelta;
+				if (fabs(avgGoalDelta) < .001f)
+					rewardHistory += REWARD_LOSS * 0.01f;
+
+				newReward     = true;	
 			}
 
 			lastGoalDistance = distGoal;
-		} */
+		}
 	}
 
 	// issue rewards and train DQN
