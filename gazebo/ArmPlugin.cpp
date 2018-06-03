@@ -260,24 +260,20 @@ void ArmPlugin::onCollisionMsg(ConstContactsPtr &contacts)
 		if(DEBUG){std::cout << "Collision between[" << contacts->contact(i).collision1()
 			     << "] and [" << contacts->contact(i).collision2() << "]\n";}
 
-	
-		/*
-		/ TODO - Check if there is collision between the arm and object, then issue learning reward
-		/
-		*/
-		
-		/*
-		
+
+		// TODO - Check if there is collision between the arm and object, then issue learning reward
+		bool collisionCheck = strcmp(contacts->contact(i).collision1().c_str(), COLLISION_ITEM) == 0;
+		bool collisionGripper = strcmp(contacts->contact(i).collision2().c_str(), COLLISION_POINT) == 0;
+
 		if (collisionCheck)
 		{
-			rewardHistory = None;
+			rewardHistory = REWARD_WIN;
 
-			newReward  = None;
-			endEpisode = None;
+			newReward  = true;
+			endEpisode = true;
 
 			return;
 		}
-		*/
 		
 	}
 }
@@ -599,6 +595,7 @@ void ArmPlugin::OnUpdate(const common::UpdateInfo& updateInfo)
 				// compute the smoothed moving average of the delta of the distance to the goal
 				avgGoalDelta  = (avgGoalDelta * alpha) + (distDelta * (1.0f - alpha));
 				rewardHistory = avgGoalDelta;
+
 				if (fabs(avgGoalDelta) < .001f)
 					rewardHistory += REWARD_LOSS * 0.05f;
 
