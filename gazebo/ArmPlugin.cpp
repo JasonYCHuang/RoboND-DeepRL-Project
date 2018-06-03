@@ -570,22 +570,18 @@ void ArmPlugin::OnUpdate(const common::UpdateInfo& updateInfo)
 		const math::Box& gripBBox = gripper->GetBoundingBox();
 		const float groundContact = 0.05f;
 		
-		/*
-		/ TODO - set appropriate Reward for robot hitting the ground.
-		/
-		*/
+		// TODO - set appropriate Reward for robot hitting the ground.
+		bool checkGroundContact = gripBBox.min.z <= groundContact;
 		
-		
-		/*if(checkGroundContact)
+		if(checkGroundContact)
 		{
 						
 			if(DEBUG){printf("GROUND CONTACT, EOE\n");}
 
-			rewardHistory = None;
-			newReward     = None;
-			endEpisode    = None;
+			rewardHistory = REWARD_LOSS;
+			newReward     = true;
+			endEpisode    = true;
 		}
-		*/
 		
 		/*
 		/ TODO - Issue an interim reward based on the distance to the object
