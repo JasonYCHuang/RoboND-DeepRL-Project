@@ -314,19 +314,16 @@ bool ArmPlugin::updateAgent()
 
 	if(DEBUG){printf("ArmPlugin - agent selected action %i\n", action);}
 
-
+	// veloctiry & joint control
+	const uint32_t actIdx = action / 2;
+	const float direction = (action % 2 == 0) ? 1.0f : -1.0f;
 
 #if VELOCITY_CONTROL
 	// if the action is even, increase the joint position by the delta parameter
 	// if the action is odd,  decrease the joint position by the delta parameter
 
-		
-	/*
-	/ TODO - Increase or decrease the joint velocity based on whether the action is even or odd
-	/
-	*/
-	
-	float velocity = 0.0; // TODO - Set joint velocity based on whether action is even or odd.
+	// TODO - Increase or decrease the joint velocity based on whether the action is even or odd
+	float velocity = vel[actIdx] + actionVelDelta * direction;
 
 	if( velocity < VELOCITY_MIN )
 		velocity = VELOCITY_MIN;
@@ -334,7 +331,7 @@ bool ArmPlugin::updateAgent()
 	if( velocity > VELOCITY_MAX )
 		velocity = VELOCITY_MAX;
 
-	vel[action/2] = velocity;
+	vel[actIdx] = velocity;
 	
 	for( uint32_t n=0; n < DOF; n++ )
 	{
@@ -352,12 +349,9 @@ bool ArmPlugin::updateAgent()
 		}
 	}
 #else
-	
-	/*
-	/ TODO - Increase or decrease the joint position based on whether the action is even or odd
-	/
-	*/
-	float joint = 0.0; // TODO - Set joint position based on whether action is even or odd.
+
+	// TODO - Increase or decrease the joint position based on whether the action is even or odd
+	float joint = ref[actIdx] + actionJointDelta * direction;
 
 	// limit the joint to the specified range
 	if( joint < JOINT_MIN )
@@ -366,7 +360,7 @@ bool ArmPlugin::updateAgent()
 	if( joint > JOINT_MAX )
 		joint = JOINT_MAX;
 
-	ref[action/2] = joint;
+	ref[actIdx] = joint;
 
 #endif
 
