@@ -35,22 +35,22 @@
 /
 */
 
-#define INPUT_WIDTH   512
-#define INPUT_HEIGHT  512
-#define OPTIMIZER "None"
-#define LEARNING_RATE 0.0f
-#define REPLAY_MEMORY 10000
-#define BATCH_SIZE 8
-#define USE_LSTM false
-#define LSTM_SIZE 32
+#define INPUT_WIDTH   128
+#define INPUT_HEIGHT  128
+#define OPTIMIZER "RMSprop"
+#define LEARNING_RATE 0.05f
+#define REPLAY_MEMORY 20000
+#define BATCH_SIZE 512
+#define USE_LSTM true
+#define LSTM_SIZE 512
 
 /*
 / TODO - Define Reward Parameters
 /
 */
 
-#define REWARD_WIN  0.0f
-#define REWARD_LOSS -0.0f
+#define REWARD_WIN  1.0f
+#define REWARD_LOSS -1.0f
 
 // Define Object Names
 #define WORLD_NAME "arm_world"
