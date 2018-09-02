@@ -265,8 +265,14 @@ void ArmPlugin::onCollisionMsg(ConstContactsPtr &contacts)
 		bool collisionCheck = strcmp(contacts->contact(i).collision1().c_str(), COLLISION_ITEM) == 0;
 		bool collisionGripper = strcmp(contacts->contact(i).collision2().c_str(), COLLISION_POINT) == 0;
 
-		if (collisionCheck)
+		if (collisionCheck && collisionGripper)
 		{
+			std::cout << "Collision between[" 
+				<< contacts->contact(i).collision1() 
+				<< "] and [" 
+				<< contacts->contact(i).collision2() 
+				<< "]\n";
+
 			rewardHistory = REWARD_WIN;
 
 			newReward  = true;
